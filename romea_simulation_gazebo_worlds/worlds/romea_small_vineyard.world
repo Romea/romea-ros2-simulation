@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<sdf version='1.6'>
+  <world name='default'>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- A ground plane -->
+    <include>
+      <!-- <uri>model://dirt_plane</uri> -->
+      <uri>model://romea_grass_plane</uri>
+    </include>
+
+    <population name="vine">
+      <model name="vine">
+        <include>
+          <uri>model://romea_vine</uri>
+        </include>
+      </model>
+      <pose>0 0 0 0 0 0</pose>
+      <distribution>
+        <type>grid</type>
+        <rows>4</rows>
+        <cols>3</cols>
+        <step>2 5 0</step>
+      </distribution>
+    </population>
+  </world>
+</sdf>

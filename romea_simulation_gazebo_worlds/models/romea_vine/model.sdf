@@ -1,0 +1,37 @@
+<?xml version='1.0'?>
+<sdf version='1.7'>
+  <model name='romea_vine'>
+    <pose>0 0 0 0 0 0</pose>
+    <static>true</static>
+
+    <link name='link'>
+      <visual name='visual'>
+        <geometry>
+          <mesh>
+            <uri>model://romea_vine/meshes/vine.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://romea_vine/materials/scripts</uri>
+            <uri>model://romea_vine/materials/textures</uri>
+            <name>romea_vine/vine</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name='collision'>
+        <geometry>
+          <mesh>
+            <uri>model://romea_vine/meshes/vine.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_without_contact>true</collide_without_contact>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+  </model>
+</sdf>

@@ -1,0 +1,20 @@
+material romea_vine/vine
+{
+  technique
+  {
+    pass
+    {
+//      ambient .2 .4 .2
+//      diffuse .3 .8 .2
+
+      cull_hardware none
+      cull_software none
+
+      texture_unit
+      {
+        texture vine_texture.jpg
+      }
+    }
+  }
+}
+
