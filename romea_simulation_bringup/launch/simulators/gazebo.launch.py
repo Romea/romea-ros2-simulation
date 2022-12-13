@@ -18,9 +18,9 @@ import yaml
 def launch_setup(context, *args, **kwargs):
 
 
-    configuration_yaml_file = LaunchConfiguration("configuration_yaml_file").perform(context)
+    simulation_configuration_filename = LaunchConfiguration("simulation_configuration_filename").perform(context)
 
-    with open(configuration_yaml_file) as f:
+    with open(simulation_configuration_filename) as f:
         configuration = yaml.safe_load(f)
 
     world = GazeboWorld(configuration["world_package"],configuration["world_name"])
@@ -58,7 +58,7 @@ def launch_setup(context, *args, **kwargs):
 def generate_launch_description():
 
     declared_arguments = []
-    declared_arguments.append(DeclareLaunchArgument("configuration_yaml_file"))
+    declared_arguments.append(DeclareLaunchArgument("simulation_configuration_filename"))
 
     return LaunchDescription(
         declared_arguments + [OpaqueFunction(function=launch_setup)]

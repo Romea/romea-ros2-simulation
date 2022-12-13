@@ -17,9 +17,9 @@ def launch_setup(context, *args, **kwargs):
 
     simulator_type = LaunchConfiguration("simulator_type").perform(context)
 
-    configuration_yaml_file = LaunchConfiguration("configuration_yaml_file").perform(
-        context
-    )
+    simulation_configuration_filename = LaunchConfiguration(
+        "simulation_configuration_filename"
+    ).perform(context)
 
     simulator = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -33,7 +33,9 @@ def launch_setup(context, *args, **kwargs):
                 )
             ]
         ),
-        launch_arguments={"configuration_yaml_file": configuration_yaml_file}.items(),
+        launch_arguments={
+            "simulation_configuration_filename": simulation_configuration_filename
+        }.items(),
     )
 
     return [simulator]
@@ -45,7 +47,9 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument("simulator_type", default_value="gazebo")
     )
-    declared_arguments.append(DeclareLaunchArgument("configuration_yaml_file"))
+    declared_arguments.append(
+        DeclareLaunchArgument("simulation_configuration_filename")
+    )
 
     return LaunchDescription(
         declared_arguments + [OpaqueFunction(function=launch_setup)]
