@@ -17,6 +17,7 @@ before_script:
   - mkdir -p ${CI_PROJECT_DIR}/workspace/src
   - cd ${CI_PROJECT_DIR}/workspace
   - vcs import src < ${CI_PROJECT_DIR}/${CI_PROJECT_NAME}.repos
+  - rosdep install --from-paths src --ignore-src -y --as-root apt:false
 
 # galatic
 galactic_focal_build:
