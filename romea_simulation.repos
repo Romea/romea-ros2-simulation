@@ -10,5 +10,5 @@ repositories:
 
   romea_ros2/tools/romea_simualtion:
     type: git
-    url: git@gitlab-ssh.irstea.fr:romea_ros2/romea_simulation.git
+    url: git@gitlab-ssh.irstea.fr:romea_ros2/simulation/romea_simulation.git
     version: main
