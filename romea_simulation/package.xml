@@ -14,7 +14,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>romea_simulation_bringup</exec_depend>
-  <exec_depend>romea_gazebo_worlds</exec_depend>
+  <exec_depend>romea_simulation_gazebo_worlds</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
