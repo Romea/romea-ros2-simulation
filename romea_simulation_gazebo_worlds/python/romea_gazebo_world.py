@@ -14,8 +14,9 @@ class GazeboWorld:
     def __init__(self, world_package, world_name):
 
         self._world_filename = self._get_world_filename(world_package, world_name)
+        print("world filename inner ", self._get_world_filename(world_package, world_name))
         self._world_tree = ET.parse(self._world_filename)
-        
+
     def set_wgs84_anchor(self, wgs84_anchor):
 
         world_element = self._world_tree.find("world")
@@ -72,7 +73,7 @@ class GazeboWorld:
         print(gazebo_version)
         return re.search(r"version\s*([\d.]+)", gazebo_version).group(1).split(".")[0]
 
-    def _get_world_filename(self,world_package, world_name):
+    def _get_world_filename(self, world_package, world_name):
 
         if world_package == "gazebo":
             return (

@@ -10,23 +10,34 @@ from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
-from gazebo_world import GazeboWorld
+from romea_simulation_bringup import (
+    get_world_package,
+    get_world_name,
+    has_wgs84_anchor,
+    get_wgs84_anchor,
+)
+
+from romea_gazebo_world import GazeboWorld
 import yaml
 
 
-    
-def launch_setup(context, *args, **kwargs):
-
-
-    simulation_configuration_filename = LaunchConfiguration("simulation_configuration_filename").perform(context)
+def get_simulation_configuration(context):
+    simulation_configuration_filename = LaunchConfiguration(
+        "simulation_configuration_filename"
+    ).perform(context)
 
     with open(simulation_configuration_filename) as f:
-        configuration = yaml.safe_load(f)
+        return yaml.safe_load(f)
 
-    world = GazeboWorld(configuration["world_package"],configuration["world_name"])
 
-    if "wgs84_anchor" in configuration:
-        world.set_wgs84_anchor(configuration["wgs84_anchor"])
+def launch_setup(context, *args, **kwargs):
+
+    configuration = get_simulation_configuration(context)
+
+    world = GazeboWorld(get_world_package(configuration), get_world_name(configuration))
+
+    if has_wgs84_anchor(configuration):
+        world.set_wgs84_anchor(get_wgs84_anchor(configuration))
 
     world.save("/tmp/gazebo_world.world")
 
@@ -38,7 +49,7 @@ def launch_setup(context, *args, **kwargs):
                 )
             ]
         ),
-        launch_arguments={"world": "/tmp/gazebo_world.world","verbose": "true"}.items(),
+        launch_arguments={"world": "/tmp/gazebo_world.world", "verbose": "true"}.items(),
     )
 
     gzclient = IncludeLaunchDescription(
