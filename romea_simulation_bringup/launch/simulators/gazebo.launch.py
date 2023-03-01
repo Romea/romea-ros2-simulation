@@ -4,6 +4,7 @@ from launch.actions import (
     IncludeLaunchDescription,
     DeclareLaunchArgument,
     OpaqueFunction,
+    GroupAction,
 )
 
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
@@ -60,10 +61,10 @@ def launch_setup(context, *args, **kwargs):
                 )
             ]
         ),
-        launch_arguments={"verbose": "true"}.items(),
+        launch_arguments={"verbose": "false"}.items(),
     )
 
-    return [gzserver, gzclient]
+    return [GroupAction([gzserver, gzclient])]
 
 
 def generate_launch_description():

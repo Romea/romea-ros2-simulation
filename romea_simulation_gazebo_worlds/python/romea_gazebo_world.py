@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 import subprocess
 import shlex
 import re
+import os
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -14,7 +15,7 @@ class GazeboWorld:
     def __init__(self, world_package, world_name):
 
         self._world_filename = self._get_world_filename(world_package, world_name)
-        print("world filename inner ", self._get_world_filename(world_package, world_name))
+        print("world filename inner ", self._world_filename)
         self._world_tree = ET.parse(self._world_filename)
 
     def set_wgs84_anchor(self, wgs84_anchor):
@@ -62,22 +63,18 @@ class GazeboWorld:
     def save(self, demo_world_filename):
         self._world_tree.write(demo_world_filename)
 
-    def _gazebo_version(self):
-
-        cmd = shlex.split("gazebo --version")
-
-        gazebo_version = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode(
-            "utf-8"
-        )
-
-        print(gazebo_version)
-        return re.search(r"version\s*([\d.]+)", gazebo_version).group(1).split(".")[0]
-
     def _get_world_filename(self, world_package, world_name):
-
         if world_package == "gazebo":
-            return (
-                "/usr/share/gazebo-" + self._gazebo_version() + "/worlds/" + world_name
-            )
+            if 'GAZEBO_RESOURCE_PATH' not in os.environ:
+                raise RuntimeError('Missing environment variable GAZEBO_RESOURCE_PATH')
+
+            resource_paths = os.environ['GAZEBO_RESOURCE_PATH'].split(':')
+            for path in resource_paths:
+                filename = f"{path}/worlds/{world_name}"
+                if os.path.isfile(filename):
+                    return filename
+
+            raise FileNotFoundError(f"No file 'worlds/{world_name}' found in GAZEBO_RESOURCE_PATH")
+
         else:
             return get_package_share_directory(world_package) + "/worlds/" + world_name
