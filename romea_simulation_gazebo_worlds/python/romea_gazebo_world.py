@@ -2,10 +2,6 @@
 
 import xml.etree.ElementTree as ET
 
-# import os
-import subprocess
-import shlex
-import re
 import os
 
 from ament_index_python.packages import get_package_share_directory
