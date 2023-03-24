@@ -23,11 +23,11 @@ import yaml
 
 
 def get_simulation_configuration(context):
-    simulation_configuration_filename = LaunchConfiguration(
-        "simulation_configuration_filename"
+    simulation_configuration_path = LaunchConfiguration(
+        "simulation_configuration_file_path"
     ).perform(context)
 
-    with open(simulation_configuration_filename) as f:
+    with open(simulation_configuration_path) as f:
         return yaml.safe_load(f)
 
 
@@ -70,7 +70,7 @@ def launch_setup(context, *args, **kwargs):
 def generate_launch_description():
 
     declared_arguments = []
-    declared_arguments.append(DeclareLaunchArgument("simulation_configuration_filename"))
+    declared_arguments.append(DeclareLaunchArgument("simulation_configuration_file_path"))
 
     return LaunchDescription(
         declared_arguments + [OpaqueFunction(function=launch_setup)]

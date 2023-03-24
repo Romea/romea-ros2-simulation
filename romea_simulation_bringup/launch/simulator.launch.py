@@ -15,8 +15,8 @@ def launch_setup(context, *args, **kwargs):
 
     simulator_type = LaunchConfiguration("simulator_type").perform(context)
 
-    simulation_configuration_filename = LaunchConfiguration(
-        "simulation_configuration_filename"
+    simulation_configuration_file_path = LaunchConfiguration(
+        "simulation_configuration_file_path"
     ).perform(context)
 
     simulator = IncludeLaunchDescription(
@@ -32,7 +32,7 @@ def launch_setup(context, *args, **kwargs):
             ]
         ),
         launch_arguments={
-            "simulation_configuration_filename": simulation_configuration_filename
+            "simulation_configuration_file_path": simulation_configuration_file_path
         }.items(),
     )
 
@@ -46,7 +46,7 @@ def generate_launch_description():
         DeclareLaunchArgument("simulator_type", default_value="gazebo")
     )
     declared_arguments.append(
-        DeclareLaunchArgument("simulation_configuration_filename")
+        DeclareLaunchArgument("simulation_configuration_file_path")
     )
 
     return LaunchDescription(
