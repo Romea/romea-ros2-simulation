@@ -11,7 +11,7 @@ class GazeboWorld:
     def __init__(self, world_package, world_name):
 
         self._world_filename = self._get_world_filename(world_package, world_name)
-        print("world filename inner ", self._world_filename)
+        # print("world filename inner ", self._world_filename)
         self._world_tree = ET.parse(self._world_filename)
 
     def set_wgs84_anchor(self, wgs84_anchor):
