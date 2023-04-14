@@ -50,7 +50,7 @@ def launch_setup(context, *args, **kwargs):
                 )
             ]
         ),
-        launch_arguments={"world": "/tmp/gazebo_world.world", "verbose": "true"}.items(),
+        launch_arguments={"world": "/tmp/gazebo_world.world", "verbose": "false"}.items(),
     )
 
     gzclient = IncludeLaunchDescription(
