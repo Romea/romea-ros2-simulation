@@ -3,7 +3,7 @@
 
 
 def get_world_package(simulation_configuration):
-    return simulation_configuration["world_package"]
+    return simulation_configuration.get("world_package")
 
 
 def get_world_name(simulation_configuration):

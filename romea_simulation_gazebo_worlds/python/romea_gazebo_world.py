@@ -60,7 +60,9 @@ class GazeboWorld:
         self._world_tree.write(demo_world_filename)
 
     def _get_world_filename(self, world_package, world_name):
-        if world_package == "gazebo":
+        if world_package is not None and world_package != 'gazebo':
+            return get_package_share_directory(world_package) + "/worlds/" + world_name
+        else:
             if 'GAZEBO_RESOURCE_PATH' not in os.environ:
                 raise RuntimeError('Missing environment variable GAZEBO_RESOURCE_PATH')
 
@@ -71,6 +73,3 @@ class GazeboWorld:
                     return filename
 
             raise FileNotFoundError(f"No file 'worlds/{world_name}' found in GAZEBO_RESOURCE_PATH")
-
-        else:
-            return get_package_share_directory(world_package) + "/worlds/" + world_name
