@@ -13,7 +13,6 @@
 # limitations under the License.
 
 
-
 def get_world_package(simulation_configuration):
     return simulation_configuration.get("world_package")
 
