@@ -26,7 +26,7 @@ galactic_focal_build:
   script:
     - colcon build
     - source install/setup.bash
-    - colcon test --packages-select romea_simulation_bringup romea_simulation_gazebo_world_bringup
+    - colcon test --packages-select romea_simulation_bringup romea_simulation_gazebo_world_bringup romea_simulation_gazebo_ros2_control
     - colcon test-result --verbose
 
 # galatic
@@ -36,5 +36,5 @@ humble_jammy_build:
   script:
     - colcon build
     - source install/setup.bash
-    - colcon test --packages-select romea_simulation_bringup romea_simulation_gazebo_world_bringup
+    - colcon test --packages-select romea_simulation_bringup romea_simulation_gazebo_world_bringup romea_simulation_gazebo_ros2_control
     - colcon test-result --verbose
