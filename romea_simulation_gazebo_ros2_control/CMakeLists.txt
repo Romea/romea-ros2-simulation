@@ -28,22 +28,26 @@ link_directories(
   ${gazebo_dev_LIBRARY_DIRS}
 )
 
+if(${ROS_DISTRO} STREQUAL "ROS_GALACTIC")
+
 # Libraries
 add_library(romea_gazebo_ros2_control SHARED
   src/gazebo_ros2_control_plugin.cpp
   src/gazebo_controller_manager.cpp
 )
+else()
+add_library(romea_gazebo_ros2_control SHARED
+  src/gazebo_ros2_control_plugin.cpp
+)
+endif()
 
 
 ament_target_dependencies(romea_gazebo_ros2_control
-  # angles
   controller_manager
   gazebo_dev
-  # gazebo_ros
   hardware_interface
   pluginlib
   rclcpp
-  # yaml_cpp_vendor
   gazebo_ros2_control
 )
 
@@ -52,7 +56,6 @@ target_include_directories(romea_gazebo_ros2_control PUBLIC
   $<INSTALL_INTERFACE:include>)
 
 target_compile_definitions(romea_gazebo_ros2_control PUBLIC ROS_DISTRO=${ROS_DISTRO})
-
 
 ## Install
 install(TARGETS
