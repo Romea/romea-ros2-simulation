@@ -15,9 +15,9 @@ def launch_setup(context, *args, **kwargs):
 
     simulator_type = LaunchConfiguration("simulator_type").perform(context)
 
-    simulation_configuration_file_path = LaunchConfiguration(
-        "simulation_configuration_file_path"
-    ).perform(context)
+    robot_namespace = LaunchConfiguration("robot_namespace").perform(context)
+
+    robot_urdf_description = LaunchConfiguration("robot_urdf_description").perform(context)
 
     simulator = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -26,13 +26,14 @@ def launch_setup(context, *args, **kwargs):
                     [
                         FindPackageShare("romea_simulation_bringup"),
                         "launch",
-                        "simulators/" + simulator_type + "_simulator.launch.py",
+                        "simulators/" + simulator_type + "_entity.launch.py",
                     ]
                 )
             ]
         ),
         launch_arguments={
-            "simulation_configuration_file_path": simulation_configuration_file_path
+            "robot_namespace": robot_namespace,
+            "robot_urdf_description": robot_urdf_description,
         }.items(),
     )
 
@@ -45,8 +46,13 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument("simulator_type", default_value="gazebo")
     )
+
     declared_arguments.append(
-        DeclareLaunchArgument("simulation_configuration_file_path")
+        DeclareLaunchArgument("robot_namespace")
+    )
+
+    declared_arguments.append(
+        DeclareLaunchArgument("robot_urdf_description")
     )
 
     return LaunchDescription(
