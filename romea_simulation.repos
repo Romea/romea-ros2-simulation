@@ -6,9 +6,9 @@ repositories:
   romea_ros2/tools/romea_common:
     type: git
     url: git@gitlab-ssh.irstea.fr:romea_ros2/tools/romea_common.git
-    version: main
+    version: devel
 
-  romea_ros2/tools/romea_simualtion:
+  romea_ros2/tools/romea_simulation:
     type: git
     url: git@gitlab-ssh.irstea.fr:romea_ros2/simulation/romea_simulation.git
-    version: main
+    version: devel
