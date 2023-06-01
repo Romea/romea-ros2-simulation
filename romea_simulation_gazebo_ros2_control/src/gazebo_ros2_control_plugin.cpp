@@ -52,7 +52,7 @@
 #define ROS_GALACTIC 0
 #define ROS_HUMBLE 1
 
-#if ROS_VERSION == ROS_GALACTIC
+#if ROS_DISTRO == ROS_GALACTIC
 #include "romea_simulation_gazebo_ros2_control/gazebo_controller_manager.hpp"
 using ControllerManager = romea_simulation_gazebo_ros2_control::GazeboControllerManager;
 #else
@@ -232,7 +232,7 @@ void GazeboRosControlPlugin::Load(
 
     resource_manager_->import_component(std::move(gazeboSystem), control_hardware_info[i]);
 
-#if ROS_VERSION == ROS_HUMBLE
+#if ROS_DISTRO == ROS_HUMBLE
     rclcpp_lifecycle::State state(
       lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE,
       hardware_interface::lifecycle_state_names::ACTIVE);
@@ -242,7 +242,12 @@ void GazeboRosControlPlugin::Load(
 
   impl_->executor_ = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
 
+#if ROS_DISTRO == ROS_GALACTIC
   rclcpp::NodeOptions options = get_cm_node_options();
+#else  
+  rclcpp::NodeOptions options = controller_manager::get_cm_node_options();
+#endif
+
   options.arguments(
     {"--ros-args", "--params-file",
       impl_->controller_manager_config_file_.c_str()});
