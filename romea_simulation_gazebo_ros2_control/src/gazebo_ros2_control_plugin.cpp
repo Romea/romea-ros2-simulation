@@ -244,7 +244,7 @@ void GazeboRosControlPlugin::Load(
 
 #if ROS_DISTRO == ROS_GALACTIC
   rclcpp::NodeOptions options = get_cm_node_options();
-#else  
+#else
   rclcpp::NodeOptions options = controller_manager::get_cm_node_options();
 #endif
 
