@@ -55,6 +55,20 @@
 #if ROS_DISTRO == ROS_GALACTIC
 #include "romea_simulation_gazebo_ros2_control/gazebo_controller_manager.hpp"
 using ControllerManager = romea_simulation_gazebo_ros2_control::GazeboControllerManager;
+
+std::vector<const tinyxml2::XMLElement *> findChildElements(
+  const tinyxml2::XMLElement * parent,
+  const char * child_name)
+{
+  std::vector<const tinyxml2::XMLElement *> childs;
+  const auto * child = parent->FirstChildElement(child_name);
+  while (child) {
+    childs.push_back(child);
+    child = child->NextSiblingElement(child_name);
+  }
+  return childs;
+}
+
 #else
 #include "controller_manager/controller_manager.hpp"
 using ControllerManager = controller_manager::ControllerManager;
@@ -218,6 +232,7 @@ void GazeboRosControlPlugin::Load(
     RCLCPP_ERROR(logger, "Failed to create robot simulation interface loader : %s", ex.what());
   }
 
+
   for (unsigned int i = 0; i < control_hardware_info.size(); i++) {
     std::string robot_hw_sim_type_str_ = control_hardware_info[i].hardware_class_type;
     std::cout << robot_hw_sim_type_str_ << std::endl;
@@ -230,7 +245,12 @@ void GazeboRosControlPlugin::Load(
       return;
     }
 
+    // auto command_interfaces = gazeboSystem->export_command_interfaces();
+    // auto state_interfaces = gazeboSystem->export_command_interfaces();
+
+
     resource_manager_->import_component(std::move(gazeboSystem), control_hardware_info[i]);
+
 
 #if ROS_DISTRO == ROS_HUMBLE
     rclcpp_lifecycle::State state(
@@ -239,6 +259,30 @@ void GazeboRosControlPlugin::Load(
     resource_manager_->set_component_state(control_hardware_info[i].name, state);
 #endif
   }
+
+#if ROS_DISTRO == ROS_GALACTIC
+  // ugly code to set joint intial positions under galactic distro
+  tinyxml2::XMLDocument doc;
+  doc.Parse(impl_->getURDF().c_str());
+  const auto * robot_it = doc.RootElement();
+  for (const auto * ros2_control_it : findChildElements(robot_it, "ros2_control")) {
+    for (const auto * joint_it : findChildElements(ros2_control_it, "joint")) {
+      std::string joint_name = std::string(joint_it->Attribute("name")) + "/position";
+      for (const auto * state_interface_it : findChildElements(joint_it, "state_interface")) {
+        if (std::string(state_interface_it->Attribute("name")) == "position") {
+          for (const auto * param_it : findChildElements(state_interface_it, "param")) {
+            if (std::string(param_it->Attribute("name")) == "initial_value" &&
+              resource_manager_->state_interface_exists(joint_name))
+            {
+              resource_manager_->claim_command_interface(joint_name).set_value(
+                param_it->FloatText());
+            }
+          }
+        }
+      }
+    }
+  }
+#endif
 
   impl_->executor_ = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
 
@@ -278,12 +322,14 @@ void GazeboRosControlPlugin::Load(
     RCLCPP_ERROR_STREAM(
       logger,
       "Desired controller update period (" << impl_->control_period_.seconds() <<
-        " s) is faster than the gazebo simulation period (" << gazebo_period.seconds() << " s).");
+        " s) is faster than the gazebo simulation period (" << gazebo_period.seconds() <<
+        " s).");
   } else if (impl_->control_period_ > gazebo_period) {
     RCLCPP_WARN_STREAM(
       logger,
       " Desired controller update period (" << impl_->control_period_.seconds() <<
-        " s) is slower than the gazebo simulation period (" << gazebo_period.seconds() << " s).");
+        " s) is slower than the gazebo simulation period (" << gazebo_period.seconds() <<
+        " s).");
   }
 
   impl_->stop_ = false;
@@ -301,6 +347,7 @@ void GazeboRosControlPlugin::Load(
     boost::bind(
       &GazeboRosControlPrivate::Update,
       impl_.get()));
+
 
   RCLCPP_INFO(logger, "Loaded gazebo_ros2_control.");
 }
@@ -351,4 +398,4 @@ std::string GazeboRosControlPrivate::getURDF() const
 
 // Register this plugin with the simulator
 GZ_REGISTER_MODEL_PLUGIN(GazeboRosControlPlugin)
-}  // namespace romea_simulation_gazebo_ros2_control
+}   // namespace romea_simulation_gazebo_ros2_control
