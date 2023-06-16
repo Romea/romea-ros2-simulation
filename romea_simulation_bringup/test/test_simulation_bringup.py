@@ -17,11 +17,7 @@ import os
 import pytest
 import yaml
 
-from romea_simulation_bringup import (
-    get_world_package,
-    get_world_name,
-    get_wgs84_anchor,
-)
+from romea_simulation_bringup import get_world_package, get_world_name
 
 
 @pytest.fixture(scope="module")
