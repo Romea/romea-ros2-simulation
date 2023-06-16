@@ -3,7 +3,7 @@
 <package format="3">
   <name>romea_simulation</name>
   <version>0.0.0</version>
-  <description>Romea simulaton metapackage</description>
+  <description>Romea simulaton stack</description>
 
   <maintainer email="jean.laneurit@inrae.fr">Jean Laneurit</maintainer>
 

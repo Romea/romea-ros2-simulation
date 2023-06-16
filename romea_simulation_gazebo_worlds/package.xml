@@ -3,8 +3,8 @@
 
 <package format="3">
   <name>romea_simulation_gazebo_worlds</name>
-  <version>2.0.0</version>
-  <description>romea_simulation_gazebo_worlds provides gazebo scenarios used by Team Romea</description>
+  <version>0.0.0</version>
+  <description>Package containing gazebo worlds used by Romea team</description>
 
 
   <maintainer email="jean.laneurit@inrae.fr">Jean Laneurit</maintainer>
