@@ -38,10 +38,3 @@ def test_get_world_package(simulation_configuration):
 
 def test_get_world_name(simulation_configuration):
     assert get_world_name(simulation_configuration) == "romea_small_vineyard.world"
-
-
-def test_get_wgs84_anchor(simulation_configuration):
-    anchor = get_wgs84_anchor(simulation_configuration)
-    assert anchor["latitude"] == 45.76265802
-    assert anchor["longitude"] == 3.11000985
-    assert anchor["altitude"] == 405.839

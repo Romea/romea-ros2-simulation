@@ -1,6 +1,2 @@
 world_package: romea_simulation_gazebo_worlds
 world_name: romea_small_vineyard.world
-wgs84_anchor:
-  latitude: 45.76265802
-  longitude: 3.11000985
-  altitude: 405.839
