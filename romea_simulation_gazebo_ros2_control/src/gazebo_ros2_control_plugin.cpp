@@ -293,7 +293,7 @@ void GazeboRosControlPlugin::Load(
 #endif
 
   options.arguments(
-    {"--ros-args", "--params-file",
+    {"--ros-args", "-p", "use_sim_time:=true", "--params-file",
       impl_->controller_manager_config_file_.c_str()});
 
   // Create the controller manager
