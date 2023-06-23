@@ -3,6 +3,7 @@
 import xml.etree.ElementTree as ET
 
 import os
+import sys
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -20,16 +21,19 @@ class GazeboWorld:
         spherical_coordinates_element = world_element.find("spherical_coordinates")
 
         if spherical_coordinates_element is not None:
-
-            raise RuntimeError(
-                "Cannot add user spherical coordinates into world "
-                + self._world_filename
-                + " because it's already exists."
-                + " Gazebo will not be launch."
+            print(
+                f"Warning: Spherical coordinates detected in {self._world_filename}: "
+                "use of the existing one",
+                file=sys.stderr
             )
+            # raise RuntimeError(
+            #     "Cannot add user spherical coordinates into world "
+            #     + self._world_filename
+            #     + " because it's already exists."
+            #     + " Gazebo will not be launch."
+            # )
 
         else:
-
             spherical_coordinates_element = ET.SubElement(
                 world_element, "spherical_coordinates"
             )
