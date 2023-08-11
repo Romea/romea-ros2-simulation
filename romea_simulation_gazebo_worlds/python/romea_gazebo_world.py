@@ -15,6 +15,36 @@ class GazeboWorld:
         # print("world filename inner ", self._world_filename)
         self._world_tree = ET.parse(self._world_filename)
 
+    def has_wgs84_anchor(self):
+        return self._world_tree.find("world") is not None
+
+    def get_wgs84_anchor(self):
+        world_element = self._world_tree.find("world")
+        spherical_coordinates_element = world_element.find(
+            "spherical_coordinates")
+
+        if spherical_coordinates_element is None:
+
+            raise RuntimeError(
+                "Cannot get spherical coordinates from world "
+                + self._world_filename
+                + " because it's not defined."
+            )
+
+        return {
+            "latitude": float(
+                ET.SubElement(spherical_coordinates_element,
+                              "latitude_deg").text
+            ),
+            "longitude": float(
+                ET.SubElement(spherical_coordinates_element,
+                              "longitude_deg").text
+            ),
+            "altitude": float(
+                ET.SubElement(spherical_coordinates_element, "elevation").text
+            ),
+        }
+
     def set_wgs84_anchor(self, wgs84_anchor):
 
         world_element = self._world_tree.find("world")
@@ -58,7 +88,6 @@ class GazeboWorld:
             )
 
             ET.SubElement(spherical_coordinates_element, "heading_deg").text = "180"
-        pass
 
     def save(self, demo_world_filename):
         self._world_tree.write(demo_world_filename)
