@@ -51,6 +51,7 @@
 
 #define ROS_GALACTIC 0
 #define ROS_HUMBLE 1
+#define ROS_IRON 2
 
 #if ROS_DISTRO == ROS_GALACTIC
 #include "romea_simulation_gazebo_ros2_control/gazebo_controller_manager.hpp"
@@ -234,7 +235,11 @@ void GazeboRosControlPlugin::Load(
 
 
   for (unsigned int i = 0; i < control_hardware_info.size(); i++) {
+    #if ROS_DISTRO == ROS_IRON
+    std::string robot_hw_sim_type_str_ = control_hardware_info[i].hardware_plugin_name;
+    #else
     std::string robot_hw_sim_type_str_ = control_hardware_info[i].hardware_class_type;
+    #endif
     std::cout << robot_hw_sim_type_str_ << std::endl;
     auto gazeboSystem = std::unique_ptr<gazebo_ros2_control::GazeboSystemInterface>(
       impl_->robot_hw_sim_loader_->createUnmanagedInstance(robot_hw_sim_type_str_));
