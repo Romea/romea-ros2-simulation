@@ -20,3 +20,15 @@ repositories:
     type: git
     url: git@gitlab-ssh.irstea.fr:romea_ros2/interfaces/vehicles/romea_mobile_base.git
     version: devel
+  romea_ros2/tools/romea_cmd_mux:
+    type: git
+    url: git@gitlab-ssh.irstea.fr:romea_ros2/tools/romea_cmd_mux.git
+    version: devel
+  romea_ros2/interfaces/teleoperation/romea_joystick:
+    type: git
+    url: git@gitlab-ssh.irstea.fr:romea_ros2/interfaces/teleoperation/romea_joy.git
+    version: devel
+  romea_ros2/interfaces/teleoperation/romea_teleop:
+    type: git
+    url: git@gitlab-ssh.irstea.fr:romea_ros2/interfaces/teleoperation/romea_teleop.git
+    version: devel
