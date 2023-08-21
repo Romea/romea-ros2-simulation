@@ -67,11 +67,11 @@ def generate_launch_description():
     )
 
     declared_arguments.append(
-        DeclareLaunchArgument("xyz", default_value=['0', '0', '0'])
+        DeclareLaunchArgument("xyz", default_value='0 0 0')
     )
 
     declared_arguments.append(
-        DeclareLaunchArgument("rpy", default_value=['0', '0', '0'])
+        DeclareLaunchArgument("rpy", default_value='0 0 0')
     )
 
     return LaunchDescription(
