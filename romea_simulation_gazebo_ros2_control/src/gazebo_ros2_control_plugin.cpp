@@ -241,9 +241,16 @@ void GazeboRosControlPlugin::Load(
     std::string robot_hw_sim_type_str_ = control_hardware_info[i].hardware_class_type;
     #endif
     std::cout << robot_hw_sim_type_str_ << std::endl;
-    auto gazeboSystem = std::unique_ptr<gazebo_ros2_control::GazeboSystemInterface>(
-      impl_->robot_hw_sim_loader_->createUnmanagedInstance(robot_hw_sim_type_str_));
 
+    std::unique_ptr<gazebo_ros2_control::GazeboSystemInterface> gazeboSystem;
+    try {
+      gazeboSystem = std::unique_ptr<gazebo_ros2_control::GazeboSystemInterface>(
+        impl_->robot_hw_sim_loader_->createUnmanagedInstance(robot_hw_sim_type_str_));
+    } catch (pluginlib::LibraryLoadException & ex) {
+      RCLCPP_ERROR(
+        logger, "Failed to create instance of %s plugin : %s", robot_hw_sim_type_str_.c_str(),
+        ex.what());
+    }
     rclcpp::Node::SharedPtr node_ros2 = std::dynamic_pointer_cast<rclcpp::Node>(impl_->model_nh_);
     if (!gazeboSystem->initSim(node_ros2, impl_->parent_model_, control_hardware_info[i], sdf)) {
       RCLCPP_FATAL(logger, "Could not initialize robot simulation interface");

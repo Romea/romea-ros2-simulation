@@ -29,13 +29,11 @@ link_directories(
 )
 
 if(${ROS_DISTRO} STREQUAL "ROS_GALACTIC")
-  message("GALATIC")
   # Libraries
   add_library(romea_gazebo_ros2_control SHARED
     src/gazebo_ros2_control_plugin.cpp
     src/gazebo_controller_manager.cpp)
 else()
-  message("HUMBLE")
   add_library(romea_gazebo_ros2_control SHARED
     src/gazebo_ros2_control_plugin.cpp)
 endif()
