@@ -1,0 +1,71 @@
+<?xml version='1.0'?>
+<sdf version='1.7'>
+  <model name='obstacle_iso18497'>
+    <pose>0 0 0 0 0 0</pose>
+    <static>false</static>
+
+    <link name='link'>
+      <visual name='body'>
+        <pose>0 0 0.265 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.190</radius>
+            <length>0.530</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.322 0.341 0.208</ambient> <!-- Munsell 2.5GY 3.5/3 -->
+          <diffuse>0.322 0.341 0.208</diffuse> <!-- Munsell 2.5GY 3.5/3 -->
+        </material>
+      </visual>
+
+      <visual name='head'>
+        <pose>0 0 0.665 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.070</radius>
+            <length>0.270</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.322 0.341 0.208</ambient> <!-- Munsell 2.5GY 3.5/3 -->
+          <diffuse>0.322 0.341 0.208</diffuse> <!-- Munsell 2.5GY 3.5/3 -->
+        </material>
+      </visual>
+
+      <collision name='body_col'>
+        <pose>0 0 0.265 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.380</radius>
+            <length>0.530</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_without_contact>false</collide_without_contact>
+          </contact>
+        </surface>
+      </collision>
+
+      <collision name='head_col'>
+        <pose>0 0 0.665 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.070</radius>
+            <length>0.270</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_without_contact>false</collide_without_contact>
+          </contact>
+        </surface>
+      </collision>
+
+      <inertial>
+        <mass>40</mass>
+      </inertial>
+    </link>
+  </model>
+</sdf>
