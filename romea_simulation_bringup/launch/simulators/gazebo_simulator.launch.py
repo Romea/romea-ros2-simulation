@@ -5,6 +5,7 @@ from launch.actions import (
     DeclareLaunchArgument,
     OpaqueFunction,
     GroupAction,
+    ExecuteProcess,
 )
 
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
@@ -58,26 +59,17 @@ def launch_setup(context, *args, **kwargs):
 
     world.save("/tmp/gazebo_world.world")
 
-    gzserver = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [
-                PathJoinSubstitution(
-                    [FindPackageShare("gazebo_ros"), "launch", "gzserver.launch.py"]
-                )
-            ]
-        ),
-        launch_arguments={"world": "/tmp/gazebo_world.world", "verbose": "false"}.items(),
+    gzserver = ExecuteProcess(
+        cmd=[
+            'gzserver', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so',
+            '/tmp/gazebo_world.world'
+        ],
+        output='screen',
     )
 
-    gzclient = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [
-                PathJoinSubstitution(
-                    [FindPackageShare("gazebo_ros"), "launch", "gzclient.launch.py"]
-                )
-            ]
-        ),
-        launch_arguments={"verbose": "false"}.items(),
+    gzclient = ExecuteProcess(
+        cmd=['gzclient'],
+        output='screen',
     )
 
     return [GroupAction([gzserver, gzclient])]
