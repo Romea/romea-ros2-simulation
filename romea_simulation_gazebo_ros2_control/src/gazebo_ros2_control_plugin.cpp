@@ -228,7 +228,6 @@ void GazeboRosControlPlugin::Load(
     #if ROS_DISTRO != ROS_GALACTIC
     resource_manager_->load_urdf(urdf_string, false, false);
     #endif
-
   } catch (...) {
     // This error should be normal as the resource manager is not supposed to load and initialize
     // them
