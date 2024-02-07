@@ -160,7 +160,6 @@ void GazeboRosControlPlugin::Load(
 {
   RCLCPP_INFO_STREAM(
     rclcpp::get_logger("gazebo_ros2_control"), "Loading gazebo_ros2_control plugin");
-
   // Save pointers to the model
   impl_->parent_model_ = parent;
 
@@ -221,8 +220,20 @@ void GazeboRosControlPlugin::Load(
     return;
   }
 
+
   std::unique_ptr<hardware_interface::ResourceManager> resource_manager_ =
     std::make_unique<hardware_interface::ResourceManager>();
+
+  try {
+    #if ROS_DISTRO != ROS_GALACTIC
+    resource_manager_->load_urdf(urdf_string, false, false);
+    #endif
+
+  } catch (...) {
+    // This error should be normal as the resource manager is not supposed to load and initialize
+    // them
+    RCLCPP_ERROR(impl_->model_nh_->get_logger(), "Error initializing URDF to resource manager!");
+  }
 
   try {
     impl_->robot_hw_sim_loader_.reset(
@@ -232,7 +243,6 @@ void GazeboRosControlPlugin::Load(
   } catch (pluginlib::LibraryLoadException & ex) {
     RCLCPP_ERROR(logger, "Failed to create robot simulation interface loader : %s", ex.what());
   }
-
 
   for (unsigned int i = 0; i < control_hardware_info.size(); i++) {
     #if ROS_DISTRO == ROS_IRON
@@ -271,6 +281,7 @@ void GazeboRosControlPlugin::Load(
     resource_manager_->set_component_state(control_hardware_info[i].name, state);
 #endif
   }
+
 
 #if ROS_DISTRO == ROS_GALACTIC
   // ugly code to set joint intial positions under galactic distro
@@ -325,6 +336,9 @@ void GazeboRosControlPlugin::Load(
   }
 
   auto cm_update_rate = impl_->controller_manager_->get_parameter("update_rate").as_int();
+
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("gazebo_ros2_control"), "update rate" << cm_update_rate);
+
   impl_->control_period_ = rclcpp::Duration(
     std::chrono::duration_cast<std::chrono::nanoseconds>(
       std::chrono::duration<double>(1.0 / static_cast<double>(cm_update_rate))));
@@ -344,6 +358,9 @@ void GazeboRosControlPlugin::Load(
         " s).");
   }
 
+  impl_->controller_manager_->set_parameter(
+    rclcpp::Parameter("use_sim_time", rclcpp::ParameterValue(true)));
+
   impl_->stop_ = false;
   auto spin = [this]()
     {
@@ -359,7 +376,6 @@ void GazeboRosControlPlugin::Load(
     boost::bind(
       &GazeboRosControlPrivate::Update,
       impl_.get()));
-
 
   RCLCPP_INFO(logger, "Loaded gazebo_ros2_control.");
 }
