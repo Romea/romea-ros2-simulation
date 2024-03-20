@@ -42,7 +42,7 @@ def launch_setup(context, *args, **kwargs):
             "robot_namespace": robot_namespace,
             "robot_urdf_description": robot_urdf_description,
             "xyz": ' '.join(map(str, meta_description.get_simulation_initial_xyz())),
-            "rpy": ' '.join(map(str, meta_description.get_simulation_initial_rpy())),
+            "rpy": ' '.join(map(str, meta_description.get_simulation_initial_rpy_rad())),
         }.items(),
     )
 
