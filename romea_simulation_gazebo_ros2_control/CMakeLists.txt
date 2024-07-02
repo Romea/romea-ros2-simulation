@@ -11,6 +11,7 @@ find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 # find_package(yaml_cpp_vendor REQUIRED)
 find_package(gazebo_ros2_control)
+find_package(control_toolbox)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -46,6 +47,7 @@ ament_target_dependencies(romea_gazebo_ros2_control
   pluginlib
   rclcpp
   gazebo_ros2_control
+  control_toolbox
 )
 
 target_include_directories(romea_gazebo_ros2_control PUBLIC
