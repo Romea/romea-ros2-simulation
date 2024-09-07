@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>romea_simulation_gazebo_ros2_control</name>
+  <name>romea_simulation_gazebo_classic</name>
   <version>0.0.0</version>
   <description>Package containg gazebo plugin for ros2 control. This package is based on
     gazebo_ros2_control package</description>

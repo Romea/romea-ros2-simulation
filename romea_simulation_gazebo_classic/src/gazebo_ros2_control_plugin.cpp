@@ -46,7 +46,7 @@
 #include "std_msgs/msg/string.hpp"
 
 // local
-#include "romea_simulation_gazebo_ros2_control/gazebo_ros2_control_plugin.hpp"
+#include "romea_simulation_gazebo/gazebo_ros2_control_plugin.hpp"
 
 
 #define ROS_GALACTIC 0
@@ -54,7 +54,7 @@
 #define ROS_IRON 2
 
 #if ROS_DISTRO == ROS_GALACTIC
-#include "romea_simulation_gazebo_ros2_control/gazebo_controller_manager.hpp"
+#include "romea_simulation_gazebo/gazebo_controller_manager.hpp"
 using ControllerManager = romea_simulation_gazebo_ros2_control::GazeboControllerManager;
 
 std::vector<const tinyxml2::XMLElement *> findChildElements(
@@ -139,6 +139,7 @@ public:
 GazeboRosControlPlugin::GazeboRosControlPlugin()
 : impl_(std::make_unique<GazeboRosControlPrivate>())
 {
+  std::cout << " constructor ros2 control" << std::endl;
 }
 
 GazeboRosControlPlugin::~GazeboRosControlPlugin()

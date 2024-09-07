@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.0)
-project(romea_simulation_gazebo_ros2_control)
+project(romea_simulation_gazebo_classic)
 
 find_package(ament_cmake REQUIRED)
 # find_package(angles REQUIRED)
@@ -23,6 +23,7 @@ endif()
 
 string(TOUPPER $ENV{ROS_DISTRO} ROS_DISTRO)
 set(ROS_DISTRO "ROS_${ROS_DISTRO}")
+set(PLUGIN_LIB_NAME "romea_gazebo_ros2_control")
 
 include_directories(include)
 link_directories(
@@ -31,16 +32,16 @@ link_directories(
 
 if(${ROS_DISTRO} STREQUAL "ROS_GALACTIC")
   # Libraries
-  add_library(romea_gazebo_ros2_control SHARED
+  add_library(${PLUGIN_LIB_NAME} SHARED
     src/gazebo_ros2_control_plugin.cpp
     src/gazebo_controller_manager.cpp)
 else()
-  add_library(romea_gazebo_ros2_control SHARED
+  add_library(${PLUGIN_LIB_NAME} SHARED
     src/gazebo_ros2_control_plugin.cpp)
 endif()
 
 
-ament_target_dependencies(romea_gazebo_ros2_control
+ament_target_dependencies(${PLUGIN_LIB_NAME}
   controller_manager
   gazebo_dev
   hardware_interface
@@ -50,19 +51,11 @@ ament_target_dependencies(romea_gazebo_ros2_control
   control_toolbox
 )
 
-target_include_directories(romea_gazebo_ros2_control PUBLIC
+target_include_directories(${PLUGIN_LIB_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 
-target_compile_definitions(romea_gazebo_ros2_control PUBLIC ROS_DISTRO=${ROS_DISTRO})
-
-## Install
-install(TARGETS
-  romea_gazebo_ros2_control
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
-)
+target_compile_definitions(${PLUGIN_LIB_NAME} PUBLIC ROS_DISTRO=${ROS_DISTRO})
 
 ament_export_include_directories(
   include
@@ -77,8 +70,13 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-install(DIRECTORY include/${PROJECT_NAME}/
-  DESTINATION include/${PROJECT_NAME}
-)
+install(DIRECTORY include/
+DESTINATION include)
+
+install(TARGETS
+${PLUGIN_LIB_NAME}
+ARCHIVE DESTINATION lib
+LIBRARY DESTINATION lib
+RUNTIME DESTINATION bin)
 
 ament_package()

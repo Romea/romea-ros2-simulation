@@ -21,7 +21,7 @@
 #include <utility>
 #include <vector>
 
-#include "romea_simulation_gazebo_ros2_control/gazebo_controller_manager.hpp"
+#include "romea_simulation_gazebo/gazebo_controller_manager.hpp"
 
 namespace
 {  // utility

@@ -13,8 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROMEA_SIMULATION_GAZEBO_ROS2_CONTROL__GAZEBO_CONTROLLER_MANAGER_HPP_
-#define ROMEA_SIMULATION_GAZEBO_ROS2_CONTROL__GAZEBO_CONTROLLER_MANAGER_HPP_
+#ifndef ROMEA_SIMULATION_GAZEBO__GAZEBO_CONTROLLER_MANAGER_HPP_
+#define ROMEA_SIMULATION_GAZEBO__GAZEBO_CONTROLLER_MANAGER_HPP_
 
 // std
 #include <memory>
@@ -342,4 +342,4 @@ private:
 
 }  // namespace romea_simulation_gazebo_ros2_control
 
-#endif  // ROMEA_SIMULATION_GAZEBO_ROS2_CONTROL__GAZEBO_CONTROLLER_MANAGER_HPP_
+#endif  // ROMEA_SIMULATION_GAZEBO__GAZEBO_CONTROLLER_MANAGER_HPP_
