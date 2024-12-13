@@ -1,8 +1,10 @@
-# 1 Overview #
+# romea_ros2_simulation_gazebo_worlds
 
-This package contains gazebo world used in romea projects
+### 1 Overview ###
 
-# 2 Package organization #
+This package contains gazebo worlds used in ROMEA projects
+
+### 2 Package organization ###
 
 This package is organized into subdirectories as follows:
 
