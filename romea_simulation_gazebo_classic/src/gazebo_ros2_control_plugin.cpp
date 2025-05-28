@@ -337,7 +337,7 @@ void GazeboRosControlPlugin::Load(
 
   auto cm_update_rate = impl_->controller_manager_->get_parameter("update_rate").as_int();
 
-  RCLCPP_INFO_STREAM(rclcpp::get_logger("gazebo_ros2_control"), "update rate" << cm_update_rate);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("gazebo_ros2_control"), "update rate: " << cm_update_rate);
 
   impl_->control_period_ = rclcpp::Duration(
     std::chrono::duration_cast<std::chrono::nanoseconds>(
