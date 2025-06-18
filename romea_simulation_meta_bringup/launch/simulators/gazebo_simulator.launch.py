@@ -1,22 +1,17 @@
 from launch import LaunchDescription
 
 from launch.actions import (
-    IncludeLaunchDescription,
     DeclareLaunchArgument,
     OpaqueFunction,
     GroupAction,
     ExecuteProcess,
 )
 
-from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
-from launch_ros.substitutions import FindPackageShare
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
 
-from romea_simulation_bringup import (
+from romea_simulation_meta_bringup import (
     get_world_package,
     get_world_name,
-    # has_wgs84_anchor,
-    # get_wgs84_anchor,
 )
 
 from romea_gazebo_world import GazeboWorld
@@ -46,13 +41,10 @@ def get_wgs84_anchor(context):
 
 def launch_setup(context, *args, **kwargs):
 
-    configuration = get_simulation_configuration(context)
     wgs84_anchor = get_wgs84_anchor(context)
-
+    configuration = get_simulation_configuration(context)
+    print(configuration)
     world = GazeboWorld(get_world_package(configuration), get_world_name(configuration))
-
-    # if has_wgs84_anchor(configuration):
-    #     world.set_wgs84_anchor(get_wgs84_anchor(configuration))
 
     if wgs84_anchor is not None:
         world.set_wgs84_anchor(wgs84_anchor)
@@ -77,11 +69,10 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
 
-    declared_arguments = []
-    declared_arguments.append(DeclareLaunchArgument("simulation_configuration_file_path"))
-
-    declared_arguments.append(DeclareLaunchArgument("wgs84_anchor_file_path", default_value=""))
-
     return LaunchDescription(
-        declared_arguments + [OpaqueFunction(function=launch_setup)]
+        [
+            DeclareLaunchArgument("simulation_configuration_file_path"),
+            DeclareLaunchArgument("wgs84_anchor_file_path", default_value=""),
+            OpaqueFunction(function=launch_setup)
+        ]
     )

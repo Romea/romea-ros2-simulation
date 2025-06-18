@@ -5,5 +5,4 @@ include:
 
 
 variables:
-  PKGS_TO_BUILD_TEST: "romea_simulation_gazebo_classic romea_simulation_bringup romea_simulation_gazebo_worlds"
-  ROS_DISTRO_TO_TEST: "humble"
+  PKGS_TO_BUILD_TEST: "romea_simulation_meta_bringup romea_simulation_gazebo_worlds"

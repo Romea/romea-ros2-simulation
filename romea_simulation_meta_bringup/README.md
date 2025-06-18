@@ -1,15 +1,15 @@
-# romea_ros2_simulation_bringup
+# romea_ros2_simulation_meta_bringup
 
 ### 1) Overview ###
 
-The romea_ros2_simulation_bringup package provides  : 
+The romea_ros2_simulation_meta_bringup package provides  : 
 
  - **Launch files**  that can start a simulator based on a user-specified configuration files (see the next section for an overview of the simulation configuration files). Currently, only the Gazebo simulator is supported.
 
    It is possible to launch a simulator via command line : 
 
     ```bash
-    ros2 launch romea_simulation_bringup simulator.launch.py simulation_configuration_file_path:=path_to_demo/config/simulation.yaml  wgs84_anchor_file_path:= path_to_demo/config/wgs84anchor.yaml simulator_type :=gazebo
+    ros2 launch romea_simulation_meta_bringup simulator.launch.py simulation_configuration_file_path:=path_to_demo/config/simulation.yaml  wgs84_anchor_file_path:= path_to_demo/config/wgs84anchor.yaml simulator_type :=gazebo
     ```
 
    Where :

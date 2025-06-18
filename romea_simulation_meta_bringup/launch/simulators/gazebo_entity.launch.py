@@ -1,3 +1,4 @@
+import math
 from launch import LaunchDescription
 
 from launch.actions import (
@@ -9,7 +10,7 @@ from launch.actions import (
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node, PushRosNamespace
 
-from romea_common_bringup import robot_urdf_prefix
+from romea_common_meta_bringup import robot_urdf_prefix
 
 
 def launch_setup(context, *args, **kwargs):
@@ -22,6 +23,9 @@ def launch_setup(context, *args, **kwargs):
     robot_description_file = "/tmp/"+robot_urdf_prefix(robot_namespace)+"description.urdf"
     with open(robot_description_file, "w") as f:
         f.write(robot_urdf_description)
+
+    print(xyz)
+    print(rpy)
 
     spawn_entity = Node(
         package="gazebo_ros",
@@ -51,29 +55,18 @@ def launch_setup(context, *args, **kwargs):
         }
     )
 
+    print("coucou")
     return [GroupAction([PushRosNamespace(robot_namespace), spawn_entity])]
 
 
 def generate_launch_description():
 
-    declared_arguments = []
-
-    declared_arguments.append(
-        DeclareLaunchArgument("robot_namespace")
-    )
-
-    declared_arguments.append(
-        DeclareLaunchArgument("robot_urdf_description")
-    )
-
-    declared_arguments.append(
-        DeclareLaunchArgument("xyz", default_value='0 0 0')
-    )
-
-    declared_arguments.append(
-        DeclareLaunchArgument("rpy", default_value='0 0 0')
-    )
-
     return LaunchDescription(
-        declared_arguments + [OpaqueFunction(function=launch_setup)]
+        [
+            DeclareLaunchArgument("robot_namespace"),
+            DeclareLaunchArgument("robot_urdf_description"),
+            DeclareLaunchArgument("xyz", default_value='0 0 0'),
+            DeclareLaunchArgument("rpy", default_value='0 0 0'),
+            OpaqueFunction(function=launch_setup),
+        ]
     )

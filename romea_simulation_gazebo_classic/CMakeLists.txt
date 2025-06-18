@@ -12,6 +12,8 @@ find_package(rclcpp REQUIRED)
 # find_package(yaml_cpp_vendor REQUIRED)
 find_package(gazebo_ros2_control)
 find_package(control_toolbox)
+find_package(sdformat9)
+
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -49,6 +51,7 @@ ament_target_dependencies(${PLUGIN_LIB_NAME}
   rclcpp
   gazebo_ros2_control
   control_toolbox
+  sdformat9
 )
 
 target_include_directories(${PLUGIN_LIB_NAME} PUBLIC

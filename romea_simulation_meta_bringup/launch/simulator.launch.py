@@ -6,9 +6,9 @@ from launch.actions import (
     OpaqueFunction,
 )
 
-from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
-from launch_ros.substitutions import FindPackageShare
+from launch.substitutions import LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from ament_index_python.packages import get_package_share_directory
 
 
 def launch_setup(context, *args, **kwargs):
@@ -25,15 +25,8 @@ def launch_setup(context, *args, **kwargs):
 
     simulator = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            [
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("romea_simulation_bringup"),
-                        "launch",
-                        "simulators/" + simulator_type + "_simulator.launch.py",
-                    ]
-                )
-            ]
+            get_package_share_directory("romea_simulation_meta_bringup")
+            + "/launch/simulators/" + simulator_type + "_simulator.launch.py",
         ),
         launch_arguments={
             "wgs84_anchor_file_path": wgs84_anchor_file_path,
@@ -46,16 +39,11 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
 
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument("simulator_type", default_value="gazebo")
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument("simulation_configuration_file_path")
-    )
-
-    declared_arguments.append(DeclareLaunchArgument("wgs84_anchor_file_path", default_value=""))
-
     return LaunchDescription(
-        declared_arguments + [OpaqueFunction(function=launch_setup)]
+        [
+            DeclareLaunchArgument("simulator_type", default_value="gazebo"),
+            DeclareLaunchArgument("simulation_configuration_file_path"),
+            DeclareLaunchArgument("wgs84_anchor_file_path", default_value=""),
+            OpaqueFunction(function=launch_setup)
+        ]
     )
