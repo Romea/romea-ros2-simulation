@@ -23,7 +23,7 @@ from romea_simulation_meta_bringup import get_world_package, get_world_name
 @pytest.fixture(scope="module")
 def simulation_configuration():
 
-    configuration_filename = os.path.join(os.getcwd(), "test_simulation_bringup.yaml")
+    configuration_filename = os.path.join(os.getcwd(), "test_simulation_meta_bringup.yaml")
     with open(configuration_filename) as f:
         return yaml.safe_load(f)
 
