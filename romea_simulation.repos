@@ -21,6 +21,4 @@ repositories:
   romea_ros2/interfaces/teleoperation/romea_joystick:
     type: git
     url: git@forge.inrae.fr:romea_ros2/interfaces/teleoperation/romea_joy.git
-  romea_ros2/interfaces/teleoperation/romea_teleop:
-    type: git
-    url: git@forge.inrae.fr:romea_ros2/interfaces/teleoperation/romea_teleop.git
+
