@@ -41,7 +41,7 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
-            DeclareLaunchArgument("simulator_type", default_value="gazebo"),
+            DeclareLaunchArgument("simulator_type"),
             DeclareLaunchArgument("simulation_configuration_file_path"),
             DeclareLaunchArgument("wgs84_anchor_file_path", default_value=""),
             OpaqueFunction(function=launch_setup)

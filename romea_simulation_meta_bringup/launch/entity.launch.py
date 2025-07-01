@@ -54,7 +54,7 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
-            DeclareLaunchArgument("simulator_type", default_value="gazebo"),
+            DeclareLaunchArgument("simulator_type"),
             DeclareLaunchArgument("robot_namespace"),
             DeclareLaunchArgument("meta_description_file_path"),
             DeclareLaunchArgument("robot_urdf_description", default_value=urdf_description),

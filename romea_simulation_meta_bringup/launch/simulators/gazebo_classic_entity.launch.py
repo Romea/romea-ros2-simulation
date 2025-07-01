@@ -24,9 +24,6 @@ def launch_setup(context, *args, **kwargs):
     with open(robot_description_file, "w") as f:
         f.write(robot_urdf_description)
 
-    print(xyz)
-    print(rpy)
-
     spawn_entity = Node(
         package="gazebo_ros",
         executable="spawn_entity.py",
@@ -43,11 +40,11 @@ def launch_setup(context, *args, **kwargs):
             "-z",
             xyz[2],
             "-R",
-            rpy[0],
+            str(float(rpy[0])*math.pi/180.),
             "-P",
-            rpy[1],
+            str(float(rpy[1])*math.pi/180.),
             "-Y",
-            rpy[2],
+            str(float(rpy[2])*math.pi/180.),
         ],
         output={
             'stdout': 'log',
@@ -55,7 +52,6 @@ def launch_setup(context, *args, **kwargs):
         }
     )
 
-    print("coucou")
     return [GroupAction([PushRosNamespace(robot_namespace), spawn_entity])]
 
 
