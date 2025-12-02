@@ -14,10 +14,12 @@
 
 
 import os
-import pytest
-import yaml
 
-from romea_simulation_meta_bringup import get_world_package, get_world_name
+import pytest
+
+from romea_simulation_meta_bringup import get_world_name, get_world_package
+
+import yaml
 
 
 @pytest.fixture(scope="module")

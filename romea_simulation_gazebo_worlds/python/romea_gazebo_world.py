@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 
-import xml.etree.ElementTree as ET
-
 import os
 import sys
+import xml.etree.ElementTree as ET
 
 from ament_index_python.packages import get_package_share_directory
 
 
 class GazeboWorld:
     def __init__(self, world_package, world_name):
-
         self._world_filename = self._get_world_filename(world_package, world_name)
-        # print("world filename inner ", self._world_filename)
+        print("world filename inner ", self._world_filename)
         self._world_tree = ET.parse(self._world_filename)
 
     def has_wgs84_anchor(self):
