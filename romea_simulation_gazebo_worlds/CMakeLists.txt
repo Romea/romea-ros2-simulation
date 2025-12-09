@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(romea_simulation_gazebo_worlds)
 
-find_package(gazebo_ros REQUIRED)
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 
