@@ -17,7 +17,7 @@ import os
 
 import pytest
 
-from romea_simulation_meta_bringup import get_world_name, get_world_package
+from romea_simulation_meta_bringup import get_simulator_configuration, get_world_name, get_world_package
 
 import yaml
 
@@ -30,9 +30,28 @@ def simulation_configuration():
         return yaml.safe_load(f)
 
 
-def test_get_world_package(simulation_configuration):
-    assert get_world_package(simulation_configuration) == "romea_simulation_gazebo_worlds"
+def test_get_gazebo_classic_world_package(simulation_configuration):
+    simulator_configuration = get_simulator_configuration(simulation_configuration, "gazebo_classic")    
+    assert get_world_package(simulator_configuration)  == "romea_simulation_gazebo_worlds"
 
 
-def test_get_world_name(simulation_configuration):
-    assert get_world_name(simulation_configuration) == "romea_small_vineyard.world"
+def test_get_gazebo_classic_world_name(simulation_configuration):
+    simulator_configuration = get_simulator_configuration(simulation_configuration, "gazebo_classic")    
+    assert get_world_name(simulator_configuration) == "romea_small_vineyard.world"
+
+
+def test_get_gazebo_world_package(simulation_configuration):
+    simulator_configuration = get_simulator_configuration(simulation_configuration, "gazebo")    
+    assert get_world_package(simulator_configuration) == "romea_simulation_gazebo_worlds"
+
+
+def test_get_gazebo_world_name(simulation_configuration):
+    simulator_configuration = get_simulator_configuration(simulation_configuration, "gazebo")    
+    assert get_world_name(simulator_configuration) == "gz_empty.sdf"
+
+
+def test_failed_get_simulator_configuration(simulation_configuration):
+    with pytest.raises(KeyError) as excinfo:
+        get_simulator_configuration(simulation_configuration, "simulator")
+
+    assert "simulator simulator configuration " in str(excinfo.value)

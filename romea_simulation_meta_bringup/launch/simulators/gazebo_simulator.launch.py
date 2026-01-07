@@ -27,6 +27,7 @@ from launch_ros.actions import Node
 
 from romea_gazebo_world import GazeboWorld
 from romea_simulation_meta_bringup import (
+    get_simulator_configuration,
     get_world_name,
     get_world_package,
 )
@@ -60,8 +61,9 @@ def get_wgs84_anchor(context):
 def launch_setup(context, *args, **kwargs):
 
     wgs84_anchor = get_wgs84_anchor(context)
-    configuration = get_simulation_configuration(context)
-    world = GazeboWorld(get_world_package(configuration), get_world_name(configuration))
+    simulation_config = get_simulation_configuration(context)
+    simulator_config= get_simulator_configuration(simulation_config, "gazebo")
+    world = GazeboWorld(get_world_package(simulator_config), get_world_name(simulator_config))
 
     if wgs84_anchor is not None:
         world.set_wgs84_anchor(wgs84_anchor)

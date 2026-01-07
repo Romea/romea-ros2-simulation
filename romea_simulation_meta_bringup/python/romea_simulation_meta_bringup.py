@@ -12,13 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+def get_simulator_configuration(simulation_configuration, simulator):    
+    try:
+        return simulation_configuration[simulator]
+    except :
+        raise KeyError(f"{simulator} simulator configuration is not found in simulation configuration file")
 
-def get_world_package(simulation_configuration):
-    return simulation_configuration.get("world_package")
+
+def get_world_package(simulator_configuration):
+    return simulator_configuration.get("world_package")
 
 
-def get_world_name(simulation_configuration):
-    return simulation_configuration["world_name"]
+def get_world_name(simulator_configuration):
+    return simulator_configuration.get("world_name")
 
 
 # def has_wgs84_anchor(simulation_configuration):
