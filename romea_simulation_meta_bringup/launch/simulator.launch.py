@@ -28,18 +28,16 @@ def launch_setup(context, *args, **kwargs):
         "simulation_configuration_file_path"
     ).perform(context)
 
-    wgs84_anchor_file_path = LaunchConfiguration(
-        "wgs84_anchor_file_path"
-    ).perform(context)
+    wgs84_anchor_file_path = LaunchConfiguration("wgs84_anchor_file_path").perform(context)
 
     simulator = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             get_package_share_directory("romea_simulation_meta_bringup")
-            + "/launch/simulators/" + simulator_type + "_simulator.launch.py",
+            + "/launch/simulators/"+ simulator_type + "_simulator.launch.py",
         ),
         launch_arguments={
             "wgs84_anchor_file_path": wgs84_anchor_file_path,
-            "simulation_configuration_file_path": simulation_configuration_file_path
+            "simulation_configuration_file_path": simulation_configuration_file_path,
         }.items(),
     )
 
@@ -51,8 +49,12 @@ def generate_launch_description():
     return LaunchDescription(
         [
             DeclareLaunchArgument("simulator_type"),
-            DeclareLaunchArgument("simulation_configuration_file_path"),
+            DeclareLaunchArgument(
+                "simulation_configuration_file_path",
+                default_value=get_package_share_directory("romea_simulation_meta_bringup")
+                + "/config/empty_simulation.yaml",
+            ),
             DeclareLaunchArgument("wgs84_anchor_file_path", default_value=""),
-            OpaqueFunction(function=launch_setup)
+            OpaqueFunction(function=launch_setup),
         ]
     )
