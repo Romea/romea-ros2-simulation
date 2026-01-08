@@ -90,10 +90,19 @@ def launch_setup(context, *args, **kwargs):
             use_composition=True,
         ),
         Node(
-            package='ros_gz_bridge',
-            executable='parameter_bridge',
-            arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
-            output='screen'
+            package="ros_gz_bridge",
+            executable="parameter_bridge",
+            name="gz_clock_bridge",
+            parameters=[
+                {"bridge_names": ["clock_bridge"]},
+                {"bridges.clock_bridge.ros_topic_name": "/clock"},
+                {"bridges.clock_bridge.gz_topic_name": "/clock"},
+                {"bridges.clock_bridge.ros_type_name": "rosgraph_msgs/msg/Clock"},
+                {"bridges.clock_bridge.gz_type_name": "gz.msgs.Clock"},
+                {"bridges.clock_bridge.direction": "GZ_TO_ROS"},
+                {"bridges.clock_bridge.lazy": True},
+                {"bridges.clock_bridge.qos_profile": "CLOCK"},
+            ],
         )
     ]
 
