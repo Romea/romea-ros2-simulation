@@ -70,8 +70,8 @@ def generate_launch_description():
         [
             DeclareLaunchArgument("entity_name"),
             DeclareLaunchArgument("robot_urdf_description"),
-            DeclareLaunchArgument("xyz", default_value='0 0 0'),
-            DeclareLaunchArgument("rpy", default_value='0 0 0'),
+            DeclareLaunchArgument("xyz", default_value='0.0 0.0 0.0'),
+            DeclareLaunchArgument("rpy", default_value='0.0 0.0 0.0'),
             OpaqueFunction(function=launch_setup),
         ]
     )

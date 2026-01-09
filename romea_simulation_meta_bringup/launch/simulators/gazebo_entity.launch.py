@@ -38,21 +38,12 @@ def launch_setup(context, *args, **kwargs):
     xyz = LaunchConfiguration("xyz").perform(context).split(' ')
     rpy = LaunchConfiguration("rpy").perform(context).split(' ')
 
+    print(robot_urdf_description)
+
     robot_description_file = f"/tmp/{entity_name}_description.urdf"
+    print(robot_description_file)
     with open(robot_description_file, "w") as f:
         f.write(robot_urdf_description)
-
-    # ros_gz_bridge_action = RosGzBridge(
-    #     bridge_name=bridge_name,
-    #     config_file=config_file,
-    #     container_name=container_name,
-    #     create_own_container=create_own_container,
-    #     namespace=namespace,
-    #     use_composition=use_composition,
-    #     use_respawn=use_respawn,
-    #     log_level=log_level,
-    #     bridge_params=bridge_params,
-    # )
 
     spawn_entity = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -60,10 +51,7 @@ def launch_setup(context, *args, **kwargs):
             + "/launch/gz_spawn_model.launch.py"
         ),
         launch_arguments=[
-            # ('world', 'world'),
             ('file', robot_description_file),
-            # ('model_string', robot_urdf_description),
-            # ('topic', topic),
             ('entity_name', entity_name),
             ('allow_renaming', 'false'),
             ('x', xyz[0]),
@@ -84,8 +72,8 @@ def generate_launch_description():
         [
             DeclareLaunchArgument("entity_name"),
             DeclareLaunchArgument("robot_urdf_description"),
-            DeclareLaunchArgument("xyz", default_value='0 0 0'),
-            DeclareLaunchArgument("rpy", default_value='0 0 0'),
+            DeclareLaunchArgument("xyz", default_value='0.0 0.0 0.0'),
+            DeclareLaunchArgument("rpy", default_value='0.0 0.0 0.0'),
             OpaqueFunction(function=launch_setup),
         ]
     )

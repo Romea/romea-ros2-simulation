@@ -31,7 +31,6 @@ def launch_setup(context, *args, **kwargs):
     robot_urdf_description = LaunchConfiguration("robot_urdf_description").perform(context)
     meta_description_file = LaunchConfiguration("meta_description_file_path").perform(context)
     meta_description = SensorMetaDescription(entity_type, meta_description_file, robot_namespace)
-    entity_name = robot_urdf_prefix(robot_namespace) + meta_description.get_name()
  
     simulator = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -39,10 +38,10 @@ def launch_setup(context, *args, **kwargs):
             + "/launch/simulators/" + simulator_type + "_entity.launch.py",
         ),
         launch_arguments={
-            "entity_name": entity_name,
+            "entity_name": robot_namespace,
             "robot_urdf_description": robot_urdf_description,
-            "xyz": ' '.join(map(str, meta_description.get_simulation().get("xyz", [0., 0., 0.]))),
-            "rpy": ' '.join(map(str, meta_description.get_simulation().get("rpy", [0., 0., 0.]))),
+            # "xyz": ' '.join(map(str, meta_description.get_simulation().get("xyz", [0., 0., 0.]))),
+            # "rpy": ' '.join(map(str, meta_description.get_simulation().get("rpy", [0., 0., 0.]))),
         }.items(),
     )
 
