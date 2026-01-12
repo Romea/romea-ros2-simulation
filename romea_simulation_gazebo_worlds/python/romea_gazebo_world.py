@@ -4,11 +4,12 @@ import os
 import sys
 import xml.etree.ElementTree as ET
 
-from ament_index_python.packages import get_package_share_directory
+from ament_index_python.packages import get_package_share_directory, get_packages_with_prefixes
 
 
 class GazeboWorld:
-    def __init__(self, world_package, world_name):
+    def __init__(self, simulator_type, world_package, world_name):
+        self._simulator = simulator_type
         self._world_filename = self._get_world_filename(world_package, world_name)
         print("world filename inner ", self._world_filename)
         self._world_tree = ET.parse(self._world_filename)
@@ -85,7 +86,8 @@ class GazeboWorld:
                 wgs84_anchor["altitude"]
             )
 
-            ET.SubElement(spherical_coordinates_element, "heading_deg").text = "180"
+            if self._simulator == "gazbo_classic":
+                ET.SubElement(spherical_coordinates_element, "heading_deg").text = "180"
 
     def save(self, demo_world_filename):
         self._world_tree.write(demo_world_filename)

@@ -63,7 +63,12 @@ def launch_setup(context, *args, **kwargs):
     wgs84_anchor = get_wgs84_anchor(context)
     simulation_config = get_simulation_configuration(context)
     simulator_config= get_simulator_configuration(simulation_config, "gazebo")
-    world = GazeboWorld(get_world_package(simulator_config), get_world_name(simulator_config))
+
+    world = GazeboWorld(
+        "gazebo",
+        get_world_package(simulator_config),
+        get_world_name(simulator_config)
+    )
 
     if wgs84_anchor is not None:
         world.set_wgs84_anchor(wgs84_anchor)
