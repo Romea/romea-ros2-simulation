@@ -38,10 +38,7 @@ def launch_setup(context, *args, **kwargs):
     xyz = LaunchConfiguration("xyz").perform(context).split(' ')
     rpy = LaunchConfiguration("rpy").perform(context).split(' ')
 
-    print(robot_urdf_description)
-
     robot_description_file = f"/tmp/{entity_name}_description.urdf"
-    print(robot_description_file)
     with open(robot_description_file, "w") as f:
         f.write(robot_urdf_description)
 
