@@ -86,7 +86,7 @@ class GazeboWorld:
                 wgs84_anchor["altitude"]
             )
 
-            if self._simulator == "gazbo_classic":
+            if self._simulator == "gazebo_classic":
                 ET.SubElement(spherical_coordinates_element, "heading_deg").text = "180"
 
     def save(self, demo_world_filename):

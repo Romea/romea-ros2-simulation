@@ -22,7 +22,11 @@ from romea_gazebo_world import GazeboWorld
 
 
 def test_create_world():
-    world = GazeboWorld("romea_simulation_gazebo_worlds", "romea_small_vineyard.world")
+    world = GazeboWorld(
+        "gazebo_classic",
+        "romea_simulation_gazebo_worlds",
+        "romea_small_vineyard.world",
+    )
     world.save("/tmp/gazebo.world")
 
     assert ET.parse("/tmp/gazebo.world").find("world").get("name") == "small_vineyard"
@@ -30,7 +34,7 @@ def test_create_world():
 
 def test_create_world_with_anchor():
 
-    world = GazeboWorld("romea_simulation_gazebo_worlds", "friction_cone.world")
+    world = GazeboWorld("gazebo_classic", "romea_simulation_gazebo_worlds", "friction_cone.world")
 
     anchor = {"latitude": 45.76265802, "longitude": 3.11000985, "altitude": 405.839}
     world.set_wgs84_anchor(anchor)
