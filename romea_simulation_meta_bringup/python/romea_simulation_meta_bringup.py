@@ -14,7 +14,7 @@
 
 def get_simulator_configuration(simulation_configuration, simulator):    
     try:
-        return simulation_configuration[simulator]
+        return simulation_configuration["simulators"][simulator]
     except :
         raise KeyError(f"{simulator} simulator configuration is not found in simulation configuration file")
 

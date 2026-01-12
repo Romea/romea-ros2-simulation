@@ -1,6 +1,11 @@
-gazebo_classic:
-  world_package: romea_simulation_gazebo_worlds
-  world_name: romea_small_vineyard.world
-gazebo:
-  world_package: romea_simulation_gazebo_worlds
-  world_name: gz_empty.sdf
+simulators:
+  gazebo_classic:
+    world_package: romea_simulation_gazebo_worlds
+    world_name: romea_small_vineyard.world
+  gazebo:
+    world_package: romea_simulation_gazebo_worlds
+    world_name: gz_empty.sdf
+entities:
+  - name: robot
+    initial_xyz: [0.0 0.0 0.0] # meters
+    initial_rpy: [0.0 0.0 0.0] # degrees
