@@ -4,10 +4,20 @@
     <physics name="1ms" type="ignored">
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1.0</real_time_factor>
+        <dart>
+    <!-- <solver>
+      <solver_type>dantzig</solver_type>
+    </solver> -->
+    <!-- <collision_detector>fcl</collision_detector> -->
+  </dart>
     </physics>
     <plugin
       filename="gz-sim-physics-system"
       name="gz::sim::systems::Physics">
+      <!-- <engine>
+        <filename> gz-physics7-bullet-featherstone-plugin</filename>
+      </engine> -->
+     
     </plugin>
     <plugin
       filename="gz-sim-user-commands-system"

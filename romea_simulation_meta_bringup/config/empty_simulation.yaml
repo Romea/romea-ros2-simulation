@@ -7,5 +7,9 @@ simulators:
     world_name: gz_empty.sdf
 entities:
   - name: robot
-    initial_xyz: [0.0 0.0 0.0] # meters
-    initial_rpy: [0.0 0.0 0.0] # degrees
+    initial_x: 0.0  # meter
+    initial_y: 0.0  # meter
+    initial_z: 0.0  # meter
+    initial_roll: 0.0 # degree
+    initial_picth: 0.0 # degree 
+    initial_yaw: 0.0 # degree

@@ -15,23 +15,27 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction
+from launch.actions import IncludeLaunchDescription, OpaqueFunction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command, LaunchConfiguration, TextSubstitution
-from launch_ros.substitutions import ExecutableInPackage
 
-from romea_common_meta_bringup.meta_description import SensorMetaDescription
-from romea_common_meta_bringup.utils import robot_urdf_prefix
+import romea_common_meta_bringup.ros_launch as common
+import romea_simulation_meta_bringup.meta_description as meta_description
+import romea_simulation_meta_bringup.ros_launch as simulation
+
 
 def launch_setup(context, *args, **kwargs):
 
-    entity_type = LaunchConfiguration("simulator_type").perform(context)
-    simulator_type = LaunchConfiguration("simulator_type").perform(context)
-    robot_namespace = LaunchConfiguration("robot_namespace").perform(context)
-    robot_urdf_description = LaunchConfiguration("robot_urdf_description").perform(context)
-    meta_description_file = LaunchConfiguration("meta_description_file_path").perform(context)
-    meta_description = SensorMetaDescription(entity_type, meta_description_file, robot_namespace)
- 
+    robot_namespace = common.get_robot_namespace(context)
+    simulator_type = simulation.get_simulator_type(context)
+    robot_urdf_description = simulation.generate_entity_urdf_description(context)
+    entity_configuration = simulation.get_entity_configuration(context, robot_namespace)
+    initial_x = meta_description.get_initial_x(entity_configuration)
+    initial_y = meta_description.get_initial_y(entity_configuration)
+    initial_z = meta_description.get_initial_z(entity_configuration)
+    initial_roll = meta_description.get_initial_roll(entity_configuration)
+    initial_pitch = meta_description.get_initial_pitch(entity_configuration)
+    initial_yaw = meta_description.get_initial_yaw(entity_configuration)
+
     simulator = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             get_package_share_directory("romea_simulation_meta_bringup")
@@ -40,8 +44,12 @@ def launch_setup(context, *args, **kwargs):
         launch_arguments={
             "entity_name": robot_namespace,
             "robot_urdf_description": robot_urdf_description,
-            # "xyz": ' '.join(map(str, meta_description.get_simulation().get("xyz", [0., 0., 0.]))),
-            # "rpy": ' '.join(map(str, meta_description.get_simulation().get("rpy", [0., 0., 0.]))),
+            "initial_x": str(initial_x),
+            "initial_y": str(initial_y),
+            "initial_z": str(initial_z),
+            "initial_roll": str(initial_roll),
+            "initial_pitch": str(initial_pitch),
+            "initial_yaw": str(initial_yaw)
         }.items(),
     )
 
@@ -50,33 +58,20 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
 
-    urdf_description = Command(
-        [
-            ExecutableInPackage(
-                "generate_urdf_description.py",
-                [
-                    TextSubstitution(text="romea_"),
-                    LaunchConfiguration("entity_type"),
-                    TextSubstitution(text="_meta_bringup"),
-                ],
-            ),
-            " robot_namespace:",
-            LaunchConfiguration("robot_namespace"),
-            " meta_description_file_path:",
-            LaunchConfiguration("meta_description_file_path"),
-            " mode:simulation",
-            " standalone:true",
-        ],
-        on_stderr="ignore",
+    default_simulation_configuration_file_path = (
+        get_package_share_directory("romea_simulation_meta_bringup")
+        + "/config/empty_simulation.yaml"
     )
 
     return LaunchDescription(
         [
-            DeclareLaunchArgument("entity_type"),
-            DeclareLaunchArgument("simulator_type"),
-            DeclareLaunchArgument("robot_namespace"),
-            DeclareLaunchArgument("meta_description_file_path"),
-            DeclareLaunchArgument("robot_urdf_description", default_value=urdf_description),
+            simulation.declare_entity_type(),
+            simulation.declare_simulator_type(),
+            simulation.declare_simulation_configuration_file_path(
+                default_simulation_configuration_file_path
+            ),
+            common.declare_robot_namespace(),
+            common.declare_meta_description_file_path("entity"),
             OpaqueFunction(function=launch_setup)
         ]
     )

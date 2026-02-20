@@ -17,7 +17,7 @@ import os
 
 import pytest
 
-from romea_simulation_meta_bringup import get_simulator_configuration, get_world_name, get_world_package
+import romea_simulation_meta_bringup.meta_description as meta_description
 
 import yaml
 
@@ -31,27 +31,57 @@ def simulation_configuration():
 
 
 def test_get_gazebo_classic_world_package(simulation_configuration):
-    simulator_configuration = get_simulator_configuration(simulation_configuration, "gazebo_classic")    
-    assert get_world_package(simulator_configuration)  == "romea_simulation_gazebo_worlds"
+    simulator_configuration = meta_description.get_simulator_configuration(
+        simulation_configuration, "gazebo_classic"
+    )
+    assert (
+        meta_description.get_world_package(simulator_configuration)
+        == "romea_simulation_gazebo_worlds"
+    )
 
 
 def test_get_gazebo_classic_world_name(simulation_configuration):
-    simulator_configuration = get_simulator_configuration(simulation_configuration, "gazebo_classic")    
-    assert get_world_name(simulator_configuration) == "romea_small_vineyard.world"
+    simulator_configuration = meta_description.get_simulator_configuration(
+        simulation_configuration, "gazebo_classic"
+    )
+    assert (
+        meta_description.get_world_name(simulator_configuration)
+        == "romea_small_vineyard.world"
+    )
 
 
 def test_get_gazebo_world_package(simulation_configuration):
-    simulator_configuration = get_simulator_configuration(simulation_configuration, "gazebo")    
-    assert get_world_package(simulator_configuration) == "romea_simulation_gazebo_worlds"
+    simulator_configuration = meta_description.get_simulator_configuration(
+        simulation_configuration, "gazebo"
+    )
+    assert (
+        meta_description.get_world_package(simulator_configuration)
+        == "romea_simulation_gazebo_worlds"
+    )
 
 
 def test_get_gazebo_world_name(simulation_configuration):
-    simulator_configuration = get_simulator_configuration(simulation_configuration, "gazebo")    
-    assert get_world_name(simulator_configuration) == "gz_empty.sdf"
+    simulator_configuration = meta_description.get_simulator_configuration(
+        simulation_configuration, "gazebo"
+    )
+    assert meta_description.get_world_name(simulator_configuration) == "gz_empty.sdf"
 
 
 def test_failed_get_simulator_configuration(simulation_configuration):
     with pytest.raises(KeyError) as excinfo:
-        get_simulator_configuration(simulation_configuration, "simulator")
+        meta_description.get_simulator_configuration(simulation_configuration, "simulator")
 
     assert "simulator simulator configuration " in str(excinfo.value)
+
+
+def test_get_robot_intial_position_and_orientation(simulation_configuration):
+    entity_configuration = meta_description.get_entity_configuration(
+        simulation_configuration, "robot"
+    )
+
+    assert meta_description.get_initial_x(entity_configuration) == 1.0
+    assert meta_description.get_initial_y(entity_configuration) == 2.0
+    assert meta_description.get_initial_z(entity_configuration) == 3.0
+    assert meta_description.get_initial_roll(entity_configuration) == 4.0
+    assert meta_description.get_initial_pitch(entity_configuration) == 5.0
+    assert meta_description.get_initial_yaw(entity_configuration) == 6.0

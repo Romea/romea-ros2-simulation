@@ -16,8 +16,6 @@ import xml.etree.ElementTree as ET
 
 from ament_index_python.packages import get_package_share_directory
 
-import pytest
-
 from romea_gazebo_world import GazeboWorld
 
 

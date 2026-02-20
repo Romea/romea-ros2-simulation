@@ -13,11 +13,11 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
-ament_python_install_module(python/romea_simulation_meta_bringup.py)
+ament_python_install_package(romea_simulation_meta_bringup)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  list(APPEND AMENT_LINT_AUTO_EXCLUDE ament_cmake_copyright)
+  set(ament_cmake_flake8_CONFIG_FILE "${CMAKE_SOURCE_DIR}/../.flake8")
   list(APPEND AMENT_LINT_AUTO_EXCLUDE ament_cmake_flake8)
   ament_lint_auto_find_test_dependencies()
 

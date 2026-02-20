@@ -15,59 +15,27 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import (
-    DeclareLaunchArgument,
-    IncludeLaunchDescription,
-    OpaqueFunction,
-    # GroupAction,
-)
+from launch.actions import IncludeLaunchDescription, OpaqueFunction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 from romea_gazebo_world import GazeboWorld
-from romea_simulation_meta_bringup import (
-    get_simulator_configuration,
-    get_world_name,
-    get_world_package,
-)
+import romea_gps_meta_bringup.ros_launch as gps
+import romea_simulation_meta_bringup.meta_description as meta_description
+import romea_simulation_meta_bringup.ros_launch as simulation
 
 from ros_gz_sim.actions import GzServer
-
-import yaml
-
-
-def get_simulation_configuration(context):
-    simulation_configuration_file_path = LaunchConfiguration(
-        "simulation_configuration_file_path"
-    ).perform(context)
-
-    with open(simulation_configuration_file_path) as f:
-        return yaml.safe_load(f)
-
-
-def get_wgs84_anchor(context):
-    wgs84_anchor_file_path = LaunchConfiguration(
-        "wgs84_anchor_file_path"
-    ).perform(context)
-
-    if wgs84_anchor_file_path == "":
-        return None
-
-    with open(wgs84_anchor_file_path) as f:
-        return yaml.safe_load(f)
 
 
 def launch_setup(context, *args, **kwargs):
 
-    wgs84_anchor = get_wgs84_anchor(context)
-    simulation_config = get_simulation_configuration(context)
-    simulator_config= get_simulator_configuration(simulation_config, "gazebo")
+    wgs84_anchor = gps.get_wgs84_anchor(context)
+    simulator_config = simulation.get_simulator_configuration(context, "gazebo")
 
     world = GazeboWorld(
         "gazebo",
-        get_world_package(simulator_config),
-        get_world_name(simulator_config)
+        meta_description.get_world_package(simulator_config),
+        meta_description.get_world_name(simulator_config)
     )
 
     if wgs84_anchor is not None:
@@ -116,8 +84,8 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
-            DeclareLaunchArgument("simulation_configuration_file_path"),
-            DeclareLaunchArgument("wgs84_anchor_file_path", default_value=""),
+            simulation.declare_simulation_configuration_file_path(),
+            gps.declare_wgs84_anchor_file_path(""),
             OpaqueFunction(function=launch_setup)
         ]
     )

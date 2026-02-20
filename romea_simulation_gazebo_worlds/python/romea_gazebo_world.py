@@ -4,7 +4,7 @@ import os
 import sys
 import xml.etree.ElementTree as ET
 
-from ament_index_python.packages import get_package_share_directory, get_packages_with_prefixes
+from ament_index_python.packages import get_package_share_directory
 
 
 class GazeboWorld:

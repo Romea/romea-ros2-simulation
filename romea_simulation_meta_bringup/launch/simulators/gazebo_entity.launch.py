@@ -18,25 +18,23 @@ import math
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import (
-    DeclareLaunchArgument,
-    GroupAction,
-    IncludeLaunchDescription,
-    OpaqueFunction,
-)
+from launch.actions import IncludeLaunchDescription, OpaqueFunction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import PushRosNamespace
 
-from romea_common_meta_bringup.utils import robot_urdf_prefix
+import romea_common_meta_bringup.ros_launch as common
+import romea_simulation_meta_bringup.ros_launch as simulation
 
 
 def launch_setup(context, *args, **kwargs):
 
-    entity_name = LaunchConfiguration("entity_name").perform(context)
-    robot_urdf_description = LaunchConfiguration("robot_urdf_description").perform(context)
-    xyz = LaunchConfiguration("xyz").perform(context).split(' ')
-    rpy = LaunchConfiguration("rpy").perform(context).split(' ')
+    robot_urdf_description = common.get_robot_urdf_description(context)
+    entity_name = simulation.get_entity_name(context)
+    initial_x = simulation.get_initial_x(context)
+    initial_y = simulation.get_initial_y(context)
+    initial_z = simulation.get_initial_z(context)
+    initial_roll = simulation.get_initial_roll(context)
+    initial_pitch = simulation.get_initial_pitch(context)
+    initial_yaw = simulation.get_initial_yaw(context)
 
     robot_description_file = f"/tmp/{entity_name}_description.urdf"
     with open(robot_description_file, "w") as f:
@@ -51,12 +49,12 @@ def launch_setup(context, *args, **kwargs):
             ('file', robot_description_file),
             ('entity_name', entity_name),
             ('allow_renaming', 'false'),
-            ('x', xyz[0]),
-            ('y', xyz[1]),
-            ('z', xyz[2]),
-            ('R',  str(float(rpy[0])*math.pi/180.)),
-            ('P',  str(float(rpy[1])*math.pi/180.)),
-            ('Y',  str(float(rpy[2])*math.pi/180.)),
+            ('x', initial_x),
+            ('y', initial_y),
+            ('z', initial_z),
+            ('R',  str(float(initial_roll)*math.pi/180.)),
+            ('P',  str(float(initial_pitch)*math.pi/180.)),
+            ('Y',  str(float(initial_yaw)*math.pi/180.)),
         ],
     )
 
@@ -67,10 +65,14 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
-            DeclareLaunchArgument("entity_name"),
-            DeclareLaunchArgument("robot_urdf_description"),
-            DeclareLaunchArgument("xyz", default_value='0.0 0.0 0.0'),
-            DeclareLaunchArgument("rpy", default_value='0.0 0.0 0.0'),
+            simulation.declare_entity_name(),
+            simulation.declare_initial_x(),
+            simulation.declare_initial_y(),
+            simulation.declare_initial_z(),
+            simulation.declare_initial_roll(),
+            simulation.declare_initial_pitch(),
+            simulation.declare_initial_yaw(),
+            common.declare_robot_urdf_description(),
             OpaqueFunction(function=launch_setup),
         ]
     )

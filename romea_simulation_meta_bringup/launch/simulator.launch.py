@@ -15,29 +15,27 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction
+from launch.actions import IncludeLaunchDescription, OpaqueFunction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
+
+import romea_gps_meta_bringup.ros_launch as gps
+import romea_simulation_meta_bringup.ros_launch as simulation
 
 
 def launch_setup(context, *args, **kwargs):
 
-    simulator_type = LaunchConfiguration("simulator_type").perform(context)
-
-    simulation_configuration_file_path = LaunchConfiguration(
-        "simulation_configuration_file_path"
-    ).perform(context)
-
-    wgs84_anchor_file_path = LaunchConfiguration("wgs84_anchor_file_path").perform(context)
+    simulator_type = simulation.get_simulator_type(context)
+    wgs84_anchor_file_path = gps.get_wgs84_anchor_file_path(context)    
+    simulation_config_file_path = simulation.get_simulation_configuration_file_path(context)
 
     simulator = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             get_package_share_directory("romea_simulation_meta_bringup")
-            + "/launch/simulators/"+ simulator_type + "_simulator.launch.py",
+            + "/launch/simulators/" + simulator_type + "_simulator.launch.py",
         ),
         launch_arguments={
             "wgs84_anchor_file_path": wgs84_anchor_file_path,
-            "simulation_configuration_file_path": simulation_configuration_file_path,
+            "simulation_configuration_file_path": simulation_config_file_path,
         }.items(),
     )
 
@@ -46,15 +44,18 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
 
+    default_simulation_configuration_file_path = (
+        get_package_share_directory("romea_simulation_meta_bringup")
+        + "/config/empty_simulation.yaml"
+    )
+
     return LaunchDescription(
         [
-            DeclareLaunchArgument("simulator_type"),
-            DeclareLaunchArgument(
-                "simulation_configuration_file_path",
-                default_value=get_package_share_directory("romea_simulation_meta_bringup")
-                + "/config/empty_simulation.yaml",
+            simulation.declare_simulator_type(),
+            simulation.declare_simulation_configuration_file_path(
+                default_simulation_configuration_file_path
             ),
-            DeclareLaunchArgument("wgs84_anchor_file_path", default_value=""),
+            gps.declare_wgs84_anchor_file_path(""),
             OpaqueFunction(function=launch_setup),
         ]
     )
