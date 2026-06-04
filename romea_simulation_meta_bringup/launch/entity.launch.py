@@ -29,12 +29,15 @@ def launch_setup(context, *args, **kwargs):
     simulator_type = simulation.get_simulator_type(context)
     robot_urdf_description = simulation.generate_entity_urdf_description(context)
     entity_configuration = simulation.get_entity_configuration(context, robot_namespace)
-    initial_x = meta_description.get_initial_x(entity_configuration)
-    initial_y = meta_description.get_initial_y(entity_configuration)
-    initial_z = meta_description.get_initial_z(entity_configuration)
-    initial_roll = meta_description.get_initial_roll(entity_configuration)
-    initial_pitch = meta_description.get_initial_pitch(entity_configuration)
-    initial_yaw = meta_description.get_initial_yaw(entity_configuration)
+
+    initial_xyz = meta_description.get_initial_xyz(entity_configuration)
+    initial_rpy = meta_description.get_initial_rpy(entity_configuration)
+    initial_x = meta_description.get_initial_x_or(entity_configuration, initial_xyz[0])
+    initial_y = meta_description.get_initial_y_or(entity_configuration, initial_xyz[1])
+    initial_z = meta_description.get_initial_z_or(entity_configuration, initial_xyz[2])
+    initial_roll = meta_description.get_initial_roll_or(entity_configuration, initial_rpy[0])
+    initial_pitch = meta_description.get_initial_pitch_or(entity_configuration, initial_rpy[1])
+    initial_yaw = meta_description.get_initial_yaw_or(entity_configuration, initial_rpy[2])
 
     simulator = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(

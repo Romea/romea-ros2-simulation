@@ -14,11 +14,9 @@
 
 
 import os
-
+import sys
 import pytest
-
 import romea_simulation_meta_bringup.meta_description as meta_description
-
 import yaml
 
 
@@ -44,10 +42,7 @@ def test_get_gazebo_classic_world_name(simulation_configuration):
     simulator_configuration = meta_description.get_simulator_configuration(
         simulation_configuration, "gazebo_classic"
     )
-    assert (
-        meta_description.get_world_name(simulator_configuration)
-        == "romea_small_vineyard.world"
-    )
+    assert meta_description.get_world_name(simulator_configuration) == "romea_small_vineyard.world"
 
 
 def test_get_gazebo_world_package(simulation_configuration):
@@ -74,14 +69,25 @@ def test_failed_get_simulator_configuration(simulation_configuration):
     assert "simulator simulator configuration " in str(excinfo.value)
 
 
+def assert_list_equal(a: list[float], b: list[float]):
+    assert len(a) == len(b)
+    for x, y in zip(a, b):
+        assert x == pytest.approx(y)
+
+
 def test_get_robot_intial_position_and_orientation(simulation_configuration):
     entity_configuration = meta_description.get_entity_configuration(
         simulation_configuration, "robot"
     )
 
-    assert meta_description.get_initial_x(entity_configuration) == 1.0
-    assert meta_description.get_initial_y(entity_configuration) == 2.0
-    assert meta_description.get_initial_z(entity_configuration) == 3.0
-    assert meta_description.get_initial_roll(entity_configuration) == 4.0
-    assert meta_description.get_initial_pitch(entity_configuration) == 5.0
-    assert meta_description.get_initial_yaw(entity_configuration) == 6.0
+    assert meta_description.get_initial_x_or(entity_configuration, 0.0) == pytest.approx(1.0)
+    assert meta_description.get_initial_y_or(entity_configuration, 0.0) == pytest.approx(2.0)
+    assert meta_description.get_initial_z_or(entity_configuration, 0.0) == pytest.approx(3.0)
+    assert meta_description.get_initial_roll_or(entity_configuration, 0.0) == pytest.approx(4.0)
+    assert meta_description.get_initial_pitch_or(entity_configuration, 0.0) == pytest.approx(5.0)
+    assert meta_description.get_initial_yaw_or(entity_configuration, 0.0) == pytest.approx(6.0)
+    
+    entity2 = meta_description.get_entity_configuration(simulation_configuration, "robot2")
+
+    assert_list_equal(meta_description.get_initial_xyz(entity2), [7., 8., 9.])
+    assert_list_equal(meta_description.get_initial_rpy(entity2), [10., 11., 12.])

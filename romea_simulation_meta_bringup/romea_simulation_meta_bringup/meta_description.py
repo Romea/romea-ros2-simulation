@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-def get_simulator_configuration(simulation_configuration, simulator_name):
+def get_simulator_configuration(simulation_configuration: dict, simulator_name: str):
     try:
         return simulation_configuration["simulators"][simulator_name]
     except KeyError:
@@ -23,40 +23,48 @@ def get_simulator_configuration(simulation_configuration, simulator_name):
         )
 
 
-def get_entity_configuration(simulation_configuration, entity_name):
+def get_entity_configuration(simulation_configuration: dict, entity_name: str):
     for entity in simulation_configuration.get("entities", []):
         if entity_name == entity.get("name"):
             return entity
     return {}
 
 
-def get_world_package(simulator_configuration):
+def get_world_package(simulator_configuration: dict):
     return simulator_configuration.get("world_package")
 
 
-def get_world_name(simulator_configuration):
+def get_world_name(simulator_configuration: dict):
     return simulator_configuration.get("world_name")
 
 
-def get_initial_x(entity_configuration):
-    return entity_configuration.get("initial_x", 0.0)
+def get_initial_xyz(entity_configuration: dict):
+    return entity_configuration.get("initial_xyz", [0.0, 0.0, 0.0])
 
 
-def get_initial_y(entity_configuration):
-    return entity_configuration.get("initial_y", 0.0)
+def get_initial_x_or(entity_configuration: dict, default: float):
+    return entity_configuration.get("initial_x", default)
 
 
-def get_initial_z(entity_configuration):
-    return entity_configuration.get("initial_z", 0.0)
+def get_initial_y_or(entity_configuration: dict, default: float):
+    return entity_configuration.get("initial_y", default)
 
 
-def get_initial_roll(entity_configuration):
-    return entity_configuration.get("initial_roll", 0.0)
+def get_initial_z_or(entity_configuration: dict, default: float):
+    return entity_configuration.get("initial_z", default)
 
 
-def get_initial_pitch(entity_configuration):
-    return entity_configuration.get("initial_pitch", 0.0)
+def get_initial_rpy(entity_configuration: dict):
+    return entity_configuration.get("initial_rpy", [0.0, 0.0, 0.0])
 
 
-def get_initial_yaw(entity_configuration):
-    return entity_configuration.get("initial_yaw", 0.0)
+def get_initial_roll_or(entity_configuration: dict, default: float):
+    return entity_configuration.get("initial_roll", default)
+
+
+def get_initial_pitch_or(entity_configuration: dict, default: float):
+    return entity_configuration.get("initial_pitch", default)
+
+
+def get_initial_yaw_or(entity_configuration: dict, default: float):
+    return entity_configuration.get("initial_yaw", default)
