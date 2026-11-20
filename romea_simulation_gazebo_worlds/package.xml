@@ -11,7 +11,13 @@
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <depend condition="$ROS_DISTRO &lt;= iron">gazebo_ros</depend>
+  <depend condition="$ROS_DISTRO &gt; iron">ros_gz_sim</depend>
+  <exec_depend condition="$ROS_DISTRO &gt; iron">ros_gz</exec_depend>
   <exec_depend condition="$ROS_DISTRO &lt;= iron">gazebo_dev</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

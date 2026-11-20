@@ -4,8 +4,8 @@ project(romea_simulation_gazebo_worlds)
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 
-find_package(gazebo_ros)
-find_package(ros_gz)
+find_package(gazebo_ros QUIET)
+find_package(ros_gz_sim QUIET)
 
 install(DIRECTORY launch media models worlds
     DESTINATION share/${PROJECT_NAME}
@@ -14,11 +14,9 @@ install(DIRECTORY launch media models worlds
 
 if(gazebo_ros_FOUND)
   ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/classic/${PROJECT_NAME}.dsv.in")
-endif()
+elseif(ros_gz_sim_FOUND)
   ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/gz/${PROJECT_NAME}.dsv.in")
   ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/gz/${PROJECT_NAME}.sh.in")
-if(ros_gz_FOUND)
-
 endif()
 
 
