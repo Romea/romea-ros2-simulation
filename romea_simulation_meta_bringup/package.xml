@@ -15,7 +15,6 @@
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
   <exec_depend>ament_index_python</exec_depend>
-  <exec_depend>romea_mobile_base_meta_bringup</exec_depend>
 
   <exec_depend>romea_common_meta_bringup</exec_depend>
   <exec_depend>romea_simulation_gazebo_worlds</exec_depend>
